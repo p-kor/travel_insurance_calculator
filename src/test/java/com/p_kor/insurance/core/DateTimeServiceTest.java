@@ -29,29 +29,25 @@ class DateTimeServiceTest {
 
     @Test
     void testDaysPeriodBetweenIncrementingDates() {
-        assertEquals(
-                DAYS, dateTimeService.daysBetweenDates(date1, date2),
+        assertEquals(DAYS, dateTimeService.daysBetweenDates(date1, date2),
                 "Wrong days between dates");
     }
 
     @Test
     void testThatZeroDaysBetweenTheSameDate() {
-        assertEquals(
-                0L, dateTimeService.daysBetweenDates(date1, date1),
+        assertEquals(0L, dateTimeService.daysBetweenDates(date1, date1),
                 "Should be zero days between the same date");
     }
 
     @Test
     void testDaysPeriodBetweenDecrementingDatesIsNegative() {
-        assertTrue(
-                dateTimeService.daysBetweenDates(date2, date1) < 0,
+        assertTrue(dateTimeService.daysBetweenDates(date2, date1) < 0,
                 "Days between decrementing dates should be negative");
     }
 
     @Test
     void testDaysPeriodBetweenDecrementingDates() {
-        assertEquals(
-                -DAYS, dateTimeService.daysBetweenDates(date2, date1),
+        assertEquals(-DAYS, dateTimeService.daysBetweenDates(date2, date1),
                 "Wrong days between dates");
     }
 

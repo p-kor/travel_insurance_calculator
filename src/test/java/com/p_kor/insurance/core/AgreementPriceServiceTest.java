@@ -13,8 +13,8 @@ class AgreementPriceServiceTest {
         AgreementPriceService agreementPriceService = new AgreementPriceService();
         long days = 43L;
         BigDecimal expectedAgreementPrice = new BigDecimal(days);
-        assertEquals(
-                expectedAgreementPrice, agreementPriceService.calculateAgreementPrice(days),
+
+        assertEquals(expectedAgreementPrice, agreementPriceService.calculateAgreementPrice(days),
                 "Wrong agreement price");
     }
 }

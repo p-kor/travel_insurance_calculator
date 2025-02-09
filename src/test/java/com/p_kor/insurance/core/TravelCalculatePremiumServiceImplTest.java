@@ -31,8 +31,8 @@ class TravelCalculatePremiumServiceImplTest {
     private static LocalDate agreementDateTo;
     private static BigDecimal ExpectedAgreementPrice;
 
-    @DisplayName("Test that the response contains correct values")
     @Test
+    @DisplayName("Test that the response contains correct values")
     void testResponseContainsCorrectValues() {
         firstName = "Ivan";
         lastName = "Ivanov";
