@@ -1,6 +1,8 @@
 package com.p_kor.insurance.rest;
 
 import com.p_kor.insurance.core.TravelCalculatePremiumService;
+import com.p_kor.insurance.dto.TravelCalculatePremiumRequest;
+import com.p_kor.insurance.dto.TravelCalculatePremiumResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
