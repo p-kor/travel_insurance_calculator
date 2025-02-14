@@ -1,6 +1,13 @@
 package com.p_kor.insurance.dto;
 
-public record ValidationError(
-        String field,
-        String message) {
+import lombok.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public final class ValidationError {
+
+    private String field;
+    private String message;
 }
