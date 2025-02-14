@@ -1,8 +1,7 @@
 package com.p_kor.insurance.core;
 
-
-import com.p_kor.insurance.rest.TravelCalculatePremiumRequest;
-import com.p_kor.insurance.rest.TravelCalculatePremiumResponse;
+import com.p_kor.insurance.dto.TravelCalculatePremiumRequest;
+import com.p_kor.insurance.dto.TravelCalculatePremiumResponse;
 
 public interface TravelCalculatePremiumService {
 
