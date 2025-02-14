@@ -75,4 +75,35 @@ class TravelCalculatePremiumServiceImplTest {
                 () -> assertEquals(ExpectedAgreementPrice, actualAgreementPrice, "wrong agreement price"),
                 () -> assertTrue(actualValidationErrors.isEmpty(), "list of validation errors should be empty"));
     }
+
+    @Test
+    @DisplayName("Test that the response contains validation errors for not correct request")
+    void testResponseContainsValidationErrors() {
+
+        BigDecimal ExpectedAgreementPrice = new BigDecimal(TestData.DAYS);
+        TravelCalculatePremiumRequest request = TestData.REQUEST_INVALID_FIRSTNAME;
+
+        Mockito.when(dateTimeService.daysBetweenDates(Mockito.any(LocalDate.class), Mockito.any(LocalDate.class)))
+                .thenReturn(TestData.DAYS);
+        Mockito.when(agreementPriceService.calculateAgreementPrice(Mockito.anyLong()))
+                .thenReturn(ExpectedAgreementPrice);
+        Mockito.when(requestValidator.validate(Mockito.any(TravelCalculatePremiumRequest.class)))
+                .thenReturn(List.of());
+
+        TravelCalculatePremiumService travelCalculatePremiumService =
+                new TravelCalculatePremiumServiceImpl(dateTimeService, agreementPriceService, requestValidator);
+
+        TravelCalculatePremiumResponse response = travelCalculatePremiumService.calculatePremium(request);
+
+        Mockito.verify(dateTimeService, Mockito.times(1))
+                .daysBetweenDates(Mockito.any(LocalDate.class), Mockito.any(LocalDate.class));
+        Mockito.verify(agreementPriceService, Mockito.times(1))
+                .calculateAgreementPrice(Mockito.anyLong());
+        Mockito.verify(requestValidator, Mockito.times(1))
+                .validate(Mockito.any(TravelCalculatePremiumRequest.class));
+
+        List<ValidationError> actualValidationErrors = response.validationErrors();
+
+        assertFalse(actualValidationErrors.isEmpty(), "list of validation errors should be not empty");
+    }
 }

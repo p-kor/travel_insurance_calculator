@@ -15,4 +15,11 @@ public class TestData {
                     .agreementDateFrom(LocalDate.now())
                     .agreementDateTo(LocalDate.now().plusDays(DAYS))
                     .build();
+
+    public static final TravelCalculatePremiumRequest REQUEST_INVALID_FIRSTNAME =
+            TravelCalculatePremiumRequest.builder()
+                    .personLastName("Ivanov")
+                    .agreementDateFrom(LocalDate.now())
+                    .agreementDateTo(LocalDate.now().plusDays(DAYS))
+                    .build();
 }
