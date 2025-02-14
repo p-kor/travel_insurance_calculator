@@ -22,19 +22,25 @@ public class TravelCalculatePremiumServiceImpl
     @Override
     public TravelCalculatePremiumResponse calculatePremium(TravelCalculatePremiumRequest request) {
 
-        List<ValidationError> requestValidationErrors = requestValidator.validate(request);
-        if (!requestValidationErrors.isEmpty()) {
-            return new TravelCalculatePremiumResponse(requestValidationErrors);
+        List<ValidationError> validationErrors = requestValidator.validate(request);
+        if (!validationErrors.isEmpty()) {
+            return TravelCalculatePremiumResponse.builder().validationErrors(validationErrors).build();
         }
 
-        String firstName = request.getPersonFirstName();
-        String lastName = request.getPersonLastName();
-        LocalDate agreementDateFrom = request.getAgreementDateFrom();
-        LocalDate agreementDateTo = request.getAgreementDateTo();
+        String firstName = request.personFirstName();
+        String lastName = request.personLastName();
+        LocalDate agreementDateFrom = request.agreementDateFrom();
+        LocalDate agreementDateTo = request.agreementDateTo();
         long days = dateTimeService.daysBetweenDates(agreementDateFrom, agreementDateTo);
         BigDecimal agreementPrice = agreementPriceService.calculateAgreementPrice(days);
 
-        return new TravelCalculatePremiumResponse(firstName, lastName, agreementDateFrom, agreementDateTo, agreementPrice);
+        return TravelCalculatePremiumResponse.builder()
+                .personFirstName(firstName)
+                .personLastName(lastName)
+                .agreementDateFrom(agreementDateFrom)
+                .agreementDateTo(agreementDateTo)
+                .agreementPrice(agreementPrice)
+                .build();
     }
 
 }

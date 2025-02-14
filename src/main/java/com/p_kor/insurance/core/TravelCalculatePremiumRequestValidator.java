@@ -23,22 +23,25 @@ class TravelCalculatePremiumRequestValidator {
 
     private Optional<ValidationError> validatePersonFirstName(TravelCalculatePremiumRequest request) {
 
-        System.out.println(request.getPersonFirstName());
-        return (request.getPersonFirstName() == null || request.getPersonLastName().isEmpty())
+        String personFirstName = request.personFirstName();
+
+        return (personFirstName == null || personFirstName.isEmpty())
                 ? Optional.of(new ValidationError("personFirstName", "Must not be empty!"))
                 : Optional.empty();
     }
 
     private Optional<ValidationError> validatePersonLastName(TravelCalculatePremiumRequest request) {
 
-        return (request.getPersonLastName() == null || request.getPersonLastName().isEmpty())
+        String personLastName = request.personLastName();
+
+        return (personLastName == null || personLastName.isEmpty())
                 ? Optional.of(new ValidationError("personLastName", "Must not be empty!"))
                 : Optional.empty();
     }
 
     private Optional<ValidationError> validateAgreementDateFrom(TravelCalculatePremiumRequest request) {
 
-        LocalDate dateFrom = request.getAgreementDateFrom();
+        LocalDate dateFrom = request.agreementDateFrom();
 
         if (dateFrom == null) {
             return Optional.of(new ValidationError("agreementDateFrom", "Must not be empty"));
@@ -51,7 +54,7 @@ class TravelCalculatePremiumRequestValidator {
 
     private Optional<ValidationError> validateAgreementDateTo(TravelCalculatePremiumRequest request) {
 
-        LocalDate dateTo = request.getAgreementDateTo();
+        LocalDate dateTo = request.agreementDateTo();
 
         if (dateTo == null) {
             return Optional.of(new ValidationError("agreementDateFrom", "Must not be empty"));
