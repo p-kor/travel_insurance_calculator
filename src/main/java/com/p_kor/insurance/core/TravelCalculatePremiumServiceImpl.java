@@ -24,7 +24,9 @@ public class TravelCalculatePremiumServiceImpl
 
         List<ValidationError> validationErrors = requestValidator.validate(request);
         if (!validationErrors.isEmpty()) {
-            return TravelCalculatePremiumResponse.builder().validationErrors(validationErrors).build();
+            return TravelCalculatePremiumResponse.builder()
+                    .validationErrors(validationErrors)
+                    .build();
         }
 
         String firstName = request.personFirstName();
