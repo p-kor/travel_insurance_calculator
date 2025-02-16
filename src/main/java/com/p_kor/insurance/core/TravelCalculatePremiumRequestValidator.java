@@ -25,7 +25,7 @@ class TravelCalculatePremiumRequestValidator {
 
         String personFirstName = request.personFirstName();
 
-        return (personFirstName == null || personFirstName.isEmpty())
+        return (personFirstName == null || personFirstName.isBlank())
                 ? Optional.of(new ValidationError("personFirstName", "Must not be empty!"))
                 : Optional.empty();
     }
@@ -34,7 +34,7 @@ class TravelCalculatePremiumRequestValidator {
 
         String personLastName = request.personLastName();
 
-        return (personLastName == null || personLastName.isEmpty())
+        return (personLastName == null || personLastName.isBlank())
                 ? Optional.of(new ValidationError("personLastName", "Must not be empty!"))
                 : Optional.empty();
     }
