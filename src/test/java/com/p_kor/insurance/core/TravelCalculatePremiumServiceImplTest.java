@@ -73,17 +73,21 @@ class TravelCalculatePremiumServiceImplTest {
                 () -> assertEquals(expectedAgreementDateFrom, actualAgreementDateFrom, "wrong agreement start date"),
                 () -> assertEquals(expectedAgreementDateTo, actualAgreementDateTo, "wrong agreement end date"),
                 () -> assertEquals(ExpectedAgreementPrice, actualAgreementPrice, "wrong agreement price"),
-                () -> assertNull(actualValidationErrors, "list of validation errors should be empty"));
+                () -> assertNull(actualValidationErrors, "list of validation errors should be null"));
     }
 
     @Test
-    @DisplayName("Test that the response contains validation errors for not correct request")
+    @DisplayName("Test that the response contains validation errors")
     void testResponseContainsValidationErrors() {
 
         TravelCalculatePremiumRequest request = TestData.VALID_REQUEST;
 
+        String errorMessage = "validation error";
+        ValidationError expectedValidationError = new ValidationError("testField", errorMessage);
+        System.out.println(expectedValidationError);
+
         Mockito.when(requestValidator.validate(Mockito.any(TravelCalculatePremiumRequest.class)))
-                .thenReturn(List.of(new ValidationError("test", "test")));
+                .thenReturn(List.of(expectedValidationError));
 
         TravelCalculatePremiumService travelCalculatePremiumService =
                 new TravelCalculatePremiumServiceImpl(dateTimeService, agreementPriceService, requestValidator);
@@ -95,6 +99,9 @@ class TravelCalculatePremiumServiceImplTest {
 
         List<ValidationError> actualValidationErrors = response.validationErrors();
 
-        assertFalse(actualValidationErrors.isEmpty(), "list of validation errors should be not empty");
+        assertAll("Wrong values in response",
+                () -> assertFalse(actualValidationErrors.isEmpty(), "list of validation errors should be not empty"),
+                () -> assertTrue(actualValidationErrors.stream().anyMatch(ve -> ve.message().equals(errorMessage)),
+                        "list of validation errors should include error with message " + errorMessage));
     }
 }
