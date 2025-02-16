@@ -3,7 +3,7 @@ package com.p_kor.insurance.core;
 import com.p_kor.insurance.dto.TravelCalculatePremiumRequest;
 import com.p_kor.insurance.dto.TravelCalculatePremiumResponse;
 import com.p_kor.insurance.dto.ValidationError;
-import com.p_kor.insurance.testdata.TestData;
+import com.p_kor.insurance.testdata.TestDataRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,11 +33,11 @@ class TravelCalculatePremiumServiceImplTest {
     @DisplayName("Test that the response contains correct values")
     void testResponseContainsCorrectValues() {
 
-        BigDecimal ExpectedAgreementPrice = new BigDecimal(TestData.DAYS);
-        TravelCalculatePremiumRequest request = TestData.VALID_REQUEST;
+        BigDecimal ExpectedAgreementPrice = new BigDecimal(TestDataRequest.DAYS);
+        TravelCalculatePremiumRequest request = TestDataRequest.VALID_REQUEST;
 
         Mockito.when(dateTimeService.daysBetweenDates(Mockito.any(LocalDate.class), Mockito.any(LocalDate.class)))
-                .thenReturn(TestData.DAYS);
+                .thenReturn(TestDataRequest.DAYS);
         Mockito.when(agreementPriceService.calculateAgreementPrice(Mockito.anyLong()))
                 .thenReturn(ExpectedAgreementPrice);
         Mockito.when(requestValidator.validate(request))
@@ -80,11 +80,10 @@ class TravelCalculatePremiumServiceImplTest {
     @DisplayName("Test that the response contains validation errors")
     void testResponseContainsValidationErrors() {
 
-        TravelCalculatePremiumRequest request = TestData.VALID_REQUEST;
+        TravelCalculatePremiumRequest request = TestDataRequest.VALID_REQUEST;
 
         String errorMessage = "validation error";
         ValidationError expectedValidationError = new ValidationError("testField", errorMessage);
-        System.out.println(expectedValidationError);
 
         Mockito.when(requestValidator.validate(Mockito.any(TravelCalculatePremiumRequest.class)))
                 .thenReturn(List.of(expectedValidationError));
