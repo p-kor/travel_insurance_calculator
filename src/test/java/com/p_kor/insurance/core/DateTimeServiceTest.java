@@ -1,57 +1,24 @@
 package com.p_kor.insurance.core;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DateTimeServiceTest {
 
-    private DateTimeService dateTimeService;
-    private static final int DAYS = 5;
-    private static LocalDate date1;
-    private static LocalDate date2;
+    @ParameterizedTest(name = "test with {2}: between {0} and {1} should be {3} days")
+    @MethodSource("com.p_kor.insurance.testdata.TestDataDateTime#dateFactory")
+    void testDaysPeriodBetweenIncrementingDates(
+            LocalDate dateFrom,
+            LocalDate dateTo,
+            String testName,
+            long expectedDays) {
 
-    @BeforeAll
-    static void setUp() {
-        date1 = LocalDate.now();
-        date2 = date1.plusDays(DAYS);
-    }
-
-    @BeforeEach
-    void init() {
-        dateTimeService = new DateTimeService();
-    }
-
-    @Test
-    void testDaysPeriodBetweenIncrementingDates() {
-        long expectedDays = DAYS;
-        long actualDays = dateTimeService.daysBetweenDates(date1, date2);
+        DateTimeService dateTimeService = new DateTimeService();
+        long actualDays = dateTimeService.daysBetweenDates(dateFrom, dateTo);
         assertEquals(expectedDays, actualDays, "Wrong days between dates");
     }
-
-    @Test
-    void testThatZeroDaysBetweenTheSameDate() {
-        long expectedDays = 0L;
-        long actualDays = dateTimeService.daysBetweenDates(date1, date1);
-        assertEquals(expectedDays, actualDays, "Should be zero days between the same date");
-    }
-
-    @Test
-    void testDaysPeriodBetweenDecrementingDatesIsNegative() {
-        long actualDays = dateTimeService.daysBetweenDates(date2, date1);
-        assertTrue(actualDays < 0, "Days between decrementing dates should be negative");
-    }
-
-    @Test
-    void testDaysPeriodBetweenDecrementingDates() {
-        long expectedDays = -DAYS;
-        long actualDays = dateTimeService.daysBetweenDates(date2, date1);
-        assertEquals(expectedDays, actualDays, "Wrong days between dates");
-    }
-
 }
