@@ -1,0 +1,5 @@
+Request should include the following fields:
+    persons FirstName
+    persons LastName
+    agreements DateFrom
+    agreements DateTo
