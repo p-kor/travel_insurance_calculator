@@ -7,6 +7,7 @@ import com.p_kor.insurance.testdata.TestDataRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,36 +22,36 @@ import static org.junit.jupiter.api.Assertions.*;
 class TravelCalculatePremiumServiceImplTest {
 
     @Mock
-    private static DateTimeService dateTimeService;
+    private DateTimeService dateTimeService;
 
     @Mock
-    private static AgreementPriceService agreementPriceService;
+    private AgreementPriceService priceService;
 
     @Mock
-    private static TravelCalculatePremiumRequestValidator requestValidator;
+    private TravelCalculatePremiumRequestValidator requestValidator;
+
+    @InjectMocks
+    private TravelCalculatePremiumServiceImpl premiumService;
 
     @Test
-    @DisplayName("Test that the response contains correct values")
-    void testResponseContainsCorrectValues() {
+    @DisplayName("Test that response contains correct values and no errors")
+    void testResponseContainsCorrectValuesAndNoErrors() {
 
-        BigDecimal ExpectedAgreementPrice = new BigDecimal(TestDataRequest.DAYS);
+        BigDecimal expectedAgreementPrice = new BigDecimal(TestDataRequest.DAYS);
         TravelCalculatePremiumRequest request = TestDataRequest.VALID_REQUEST;
 
         Mockito.when(dateTimeService.daysBetweenDates(Mockito.any(LocalDate.class), Mockito.any(LocalDate.class)))
                 .thenReturn(TestDataRequest.DAYS);
-        Mockito.when(agreementPriceService.calculateAgreementPrice(Mockito.anyLong()))
-                .thenReturn(ExpectedAgreementPrice);
-        Mockito.when(requestValidator.validate(request))
+        Mockito.when(priceService.calculateAgreementPrice(Mockito.anyLong()))
+                .thenReturn(expectedAgreementPrice);
+        Mockito.when(requestValidator.validate(Mockito.any(TravelCalculatePremiumRequest.class)))
                 .thenReturn(List.of());
 
-        TravelCalculatePremiumService travelCalculatePremiumService =
-                new TravelCalculatePremiumServiceImpl(dateTimeService, agreementPriceService, requestValidator);
-
-        TravelCalculatePremiumResponse response = travelCalculatePremiumService.calculatePremium(request);
+        TravelCalculatePremiumResponse response = premiumService.calculatePremium(request);
 
         Mockito.verify(dateTimeService, Mockito.times(1))
                 .daysBetweenDates(Mockito.any(LocalDate.class), Mockito.any(LocalDate.class));
-        Mockito.verify(agreementPriceService, Mockito.times(1))
+        Mockito.verify(priceService, Mockito.times(1))
                 .calculateAgreementPrice(Mockito.anyLong());
         Mockito.verify(requestValidator, Mockito.times(1))
                 .validate(Mockito.any(TravelCalculatePremiumRequest.class));
@@ -67,40 +68,48 @@ class TravelCalculatePremiumServiceImplTest {
         BigDecimal actualAgreementPrice = response.agreementPrice();
         List<ValidationError> actualValidationErrors = response.validationErrors();
 
-        assertAll("Wrong values in response",
+        assertAll("Check wrong values in response",
                 () -> assertEquals(expectedPersonFirstName, actualPersonFirstName, "wrong first name"),
                 () -> assertEquals(expectedPersonLastName, actualPersonLastName, "wrong last name"),
                 () -> assertEquals(expectedAgreementDateFrom, actualAgreementDateFrom, "wrong agreement start date"),
                 () -> assertEquals(expectedAgreementDateTo, actualAgreementDateTo, "wrong agreement end date"),
-                () -> assertEquals(ExpectedAgreementPrice, actualAgreementPrice, "wrong agreement price"),
+                () -> assertEquals(expectedAgreementPrice, actualAgreementPrice, "wrong agreement price"),
                 () -> assertNull(actualValidationErrors, "list of validation errors should be null"));
     }
 
     @Test
-    @DisplayName("Test that the response contains validation errors")
-    void testResponseContainsValidationErrors() {
+    @DisplayName("Test that response contains validation error")
+    void testResponseContainsValidationError() {
 
         TravelCalculatePremiumRequest request = TestDataRequest.VALID_REQUEST;
-
-        String errorMessage = "validation error";
-        ValidationError expectedValidationError = new ValidationError("testField", errorMessage);
+        ValidationError expectedValidationError = new ValidationError("testField", "validation error");
 
         Mockito.when(requestValidator.validate(Mockito.any(TravelCalculatePremiumRequest.class)))
                 .thenReturn(List.of(expectedValidationError));
 
-        TravelCalculatePremiumService travelCalculatePremiumService =
-                new TravelCalculatePremiumServiceImpl(dateTimeService, agreementPriceService, requestValidator);
-
-        TravelCalculatePremiumResponse response = travelCalculatePremiumService.calculatePremium(request);
+        TravelCalculatePremiumResponse response = premiumService.calculatePremium(request);
 
         Mockito.verify(requestValidator, Mockito.times(1))
                 .validate(Mockito.any(TravelCalculatePremiumRequest.class));
+        Mockito.verifyNoInteractions(priceService);
+        Mockito.verifyNoInteractions(dateTimeService);
 
+        String actualPersonFirstName = response.personFirstName();
+        String actualPersonLastName = response.personLastName();
+        LocalDate actualAgreementDateFrom = response.agreementDateFrom();
+        LocalDate actualAgreementDateTo = response.agreementDateTo();
+        BigDecimal actualAgreementPrice = response.agreementPrice();
         List<ValidationError> actualValidationErrors = response.validationErrors();
 
-        assertAll("Wrong values in response",
-                () -> assertFalse(actualValidationErrors.isEmpty(), "list of validation errors should be not empty"),
-                () -> assertTrue(actualValidationErrors.stream().anyMatch(ve -> ve.message().equals(errorMessage)),
-                        "list of validation errors should include error with message " + errorMessage));
+        assertAll("Check response with validation error",
+                () -> assertNull(actualPersonFirstName, "person first name should be null"),
+                () -> assertNull(actualPersonLastName, "person last name should be null"),
+                () -> assertNull(actualAgreementDateFrom, "agreement start date should be null"),
+                () -> assertNull(actualAgreementDateTo, "agreement end date should be null"),
+                () -> assertNull(actualAgreementPrice, "agreement agreement price should be null"),
+                () -> assertEquals(actualValidationErrors.size(), 1,
+                        "list of validation errors should contain one validation error"),
+                () -> assertEquals(actualValidationErrors.getFirst(), expectedValidationError,
+                        "list of validation errors should contain the expected validation error"));
     }
 }

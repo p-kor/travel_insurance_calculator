@@ -31,63 +31,73 @@ public class TestDataRequest {
     private static Stream<Arguments> invalidRequestFactory() {
         Stream.Builder<Arguments> streamBuilder = Stream.builder();
 
-        TravelCalculatePremiumRequest request1 = TravelCalculatePremiumRequest.builder()
+        TravelCalculatePremiumRequest request = TravelCalculatePremiumRequest.builder()
                 .personLastName("Ivanov")
                 .agreementDateFrom(LocalDate.now())
                 .agreementDateTo(LocalDate.now().plusDays(DAYS))
                 .build();
 
-        streamBuilder.add(Arguments.arguments(request1, "firstName is null"));
+        streamBuilder.add(Arguments.arguments(request, "firstName is null"));
 
-        TravelCalculatePremiumRequest request2 = TravelCalculatePremiumRequest.builder()
+        request = TravelCalculatePremiumRequest.builder()
+                .personFirstName(" ")
+                .personLastName("Ivanov")
+                .agreementDateFrom(LocalDate.now())
+                .agreementDateTo(LocalDate.now().plusDays(DAYS))
+                .build();
+
+        streamBuilder.add(Arguments.arguments(request, "firstName is blank"));
+
+        request = TravelCalculatePremiumRequest.builder()
                 .personFirstName("Ivan")
                 .agreementDateFrom(LocalDate.now())
                 .agreementDateTo(LocalDate.now().plusDays(DAYS))
                 .build();
 
-        streamBuilder.add(Arguments.arguments(request2, "lastName is null"));
+        streamBuilder.add(Arguments.arguments(request, "lastName is null"));
 
-        TravelCalculatePremiumRequest request3 = TravelCalculatePremiumRequest.builder()
+        request = TravelCalculatePremiumRequest.builder()
                 .personFirstName("Ivan")
+                .personLastName(" ")
                 .agreementDateFrom(LocalDate.now())
                 .agreementDateTo(LocalDate.now().plusDays(DAYS))
                 .build();
 
-        streamBuilder.add(Arguments.arguments(request3, "lastName is empty string"));
+        streamBuilder.add(Arguments.arguments(request, "lastName is blank string"));
 
-        TravelCalculatePremiumRequest request4 = TravelCalculatePremiumRequest.builder()
+        request = TravelCalculatePremiumRequest.builder()
                 .personFirstName("Ivan")
                 .personLastName("Ivanov")
                 .agreementDateTo(LocalDate.now().plusDays(DAYS))
                 .build();
 
-        streamBuilder.add(Arguments.arguments(request4, "agreementDateFrom is null"));
+        streamBuilder.add(Arguments.arguments(request, "agreementDateFrom is null"));
 
-        TravelCalculatePremiumRequest request5 = TravelCalculatePremiumRequest.builder()
+        request = TravelCalculatePremiumRequest.builder()
                 .personFirstName("Ivan")
                 .personLastName("Ivanov")
                 .agreementDateFrom(LocalDate.now().minusDays(1))
                 .agreementDateTo(LocalDate.now().plusDays(DAYS))
                 .build();
 
-        streamBuilder.add(Arguments.arguments(request5, "agreementDateFrom is before the current date"));
+        streamBuilder.add(Arguments.arguments(request, "agreementDateFrom is before the current date"));
 
-        TravelCalculatePremiumRequest request6 = TravelCalculatePremiumRequest.builder()
+        request = TravelCalculatePremiumRequest.builder()
                 .personFirstName("Ivan")
                 .personLastName("Ivanov")
                 .agreementDateFrom(LocalDate.now())
                 .build();
 
-        streamBuilder.add(Arguments.arguments(request6, "agreementDateTo is null"));
+        streamBuilder.add(Arguments.arguments(request, "agreementDateTo is null"));
 
-        TravelCalculatePremiumRequest request7 = TravelCalculatePremiumRequest.builder()
+        request = TravelCalculatePremiumRequest.builder()
                 .personFirstName("Ivan")
                 .personLastName("Ivanov")
                 .agreementDateFrom(LocalDate.now())
                 .agreementDateTo(LocalDate.now().minusDays(1))
                 .build();
 
-        streamBuilder.add(Arguments.arguments(request7, "agreementDateTo is before the current date"));
+        streamBuilder.add(Arguments.arguments(request, "agreementDateTo is before the current date"));
 
         return streamBuilder.build();
     }
