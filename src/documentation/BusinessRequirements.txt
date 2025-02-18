@@ -6,3 +6,19 @@
 
 2. Agreement DateTo should be after DateFrom
 
+underwriting
+underwriting rate
+UnderwritingRate
+
+The process of calculating the price of an insurance policy
+is typically referred to as "underwriting".
+Underwriting involves assessing the risk of insuring a particular
+individual or entity, based on factors such as age, health, occupation,
+location, and other relevant information.
+Once the risk has been assessed, the insurer can then determine
+the appropriate premium to charge for the policy,
+based on the likelihood of a claim being made and the potential cost
+of that claim. Underwriting is a key part of the
+insurance industry, as it helps to ensure that premiums are set at a
+level that is fair and sustainable for both the insurer and the
+policyholder.

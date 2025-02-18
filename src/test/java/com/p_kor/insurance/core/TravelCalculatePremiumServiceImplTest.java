@@ -25,7 +25,7 @@ class TravelCalculatePremiumServiceImplTest {
     private DateTimeService dateTimeService;
 
     @Mock
-    private AgreementPriceService priceService;
+    private UnderwritingRateService underwritingRateService;
 
     @Mock
     private TravelCalculatePremiumRequestValidator requestValidator;
@@ -42,7 +42,7 @@ class TravelCalculatePremiumServiceImplTest {
 
         Mockito.when(dateTimeService.daysBetweenDates(Mockito.any(LocalDate.class), Mockito.any(LocalDate.class)))
                 .thenReturn(TestDataRequest.DAYS);
-        Mockito.when(priceService.calculateAgreementPrice(Mockito.anyLong()))
+        Mockito.when(underwritingRateService.calculateAgreementPrice(Mockito.anyLong()))
                 .thenReturn(expectedAgreementPrice);
         Mockito.when(requestValidator.validate(Mockito.any(TravelCalculatePremiumRequest.class)))
                 .thenReturn(List.of());
@@ -51,7 +51,7 @@ class TravelCalculatePremiumServiceImplTest {
 
         Mockito.verify(dateTimeService, Mockito.times(1))
                 .daysBetweenDates(Mockito.any(LocalDate.class), Mockito.any(LocalDate.class));
-        Mockito.verify(priceService, Mockito.times(1))
+        Mockito.verify(underwritingRateService, Mockito.times(1))
                 .calculateAgreementPrice(Mockito.anyLong());
         Mockito.verify(requestValidator, Mockito.times(1))
                 .validate(Mockito.any(TravelCalculatePremiumRequest.class));
@@ -91,7 +91,7 @@ class TravelCalculatePremiumServiceImplTest {
 
         Mockito.verify(requestValidator, Mockito.times(1))
                 .validate(Mockito.any(TravelCalculatePremiumRequest.class));
-        Mockito.verifyNoInteractions(priceService);
+        Mockito.verifyNoInteractions(underwritingRateService);
         Mockito.verifyNoInteractions(dateTimeService);
 
         String actualPersonFirstName = response.personFirstName();
@@ -107,9 +107,9 @@ class TravelCalculatePremiumServiceImplTest {
                 () -> assertNull(actualAgreementDateFrom, "agreement start date should be null"),
                 () -> assertNull(actualAgreementDateTo, "agreement end date should be null"),
                 () -> assertNull(actualAgreementPrice, "agreement agreement price should be null"),
-                () -> assertEquals(actualValidationErrors.size(), 1,
+                () -> assertEquals(1, actualValidationErrors.size(),
                         "list of validation errors should contain one validation error"),
-                () -> assertEquals(actualValidationErrors.getFirst(), expectedValidationError,
+                () -> assertEquals(expectedValidationError, actualValidationErrors.getFirst(),
                         "list of validation errors should contain the expected validation error"));
     }
 }

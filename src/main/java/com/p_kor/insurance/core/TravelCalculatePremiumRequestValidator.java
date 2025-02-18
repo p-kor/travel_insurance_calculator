@@ -54,14 +54,19 @@ class TravelCalculatePremiumRequestValidator {
 
     private Optional<ValidationError> validateAgreementDateTo(TravelCalculatePremiumRequest request) {
 
+        LocalDate dateFrom = request.agreementDateFrom();
         LocalDate dateTo = request.agreementDateTo();
 
         if (dateTo == null) {
             return Optional.of(new ValidationError("agreementDateFrom", "Must not be empty"));
         }
 
-        return (!dateTo.isAfter(LocalDate.now()))
-                ? Optional.of(new ValidationError("agreementDateFrom", "Must not be earlier than current"))
+        if (dateFrom == null) {
+            return Optional.empty();        // error already found
+        }
+
+        return (!dateTo.isAfter(dateFrom))
+                ? Optional.of(new ValidationError("agreementDateFrom", "Must be after agreementDateFrom"))
                 : Optional.empty();
     }
 

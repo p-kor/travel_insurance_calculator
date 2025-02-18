@@ -6,11 +6,11 @@ import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class AgreementPriceServiceTest {
+class UnderwritingRateServiceTest {
 
     @Test
     void testThatAgreementPriceEqualsToDaysPeriod() {
-        AgreementPriceService agreementPriceService = new AgreementPriceService();
+        UnderwritingRateService agreementPriceService = new UnderwritingRateService();
         long days = 43L;
         BigDecimal expectedAgreementPrice = new BigDecimal(days);
         BigDecimal actualAgreementPrice = agreementPriceService.calculateAgreementPrice(days);

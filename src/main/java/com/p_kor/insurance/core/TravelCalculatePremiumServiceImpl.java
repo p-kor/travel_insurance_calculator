@@ -16,7 +16,7 @@ public class TravelCalculatePremiumServiceImpl
         implements TravelCalculatePremiumService {
 
     private final DateTimeService dateTimeService;
-    private final AgreementPriceService agreementPriceService;
+    private final UnderwritingRateService agreementPriceService;
     private final TravelCalculatePremiumRequestValidator requestValidator;
 
     @Override
