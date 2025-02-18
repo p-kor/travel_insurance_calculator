@@ -60,7 +60,7 @@ class TravelCalculatePremiumRequestValidator {
             return Optional.of(new ValidationError("agreementDateFrom", "Must not be empty"));
         }
 
-        return (dateTo.isBefore(LocalDate.now()))
+        return (!dateTo.isAfter(LocalDate.now()))
                 ? Optional.of(new ValidationError("agreementDateFrom", "Must not be earlier than current"))
                 : Optional.empty();
     }

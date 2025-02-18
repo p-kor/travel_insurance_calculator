@@ -97,7 +97,16 @@ public class TestDataRequest {
                 .agreementDateTo(LocalDate.now().minusDays(1))
                 .build();
 
-        streamBuilder.add(Arguments.arguments(request, "agreementDateTo is before the current date"));
+        streamBuilder.add(Arguments.arguments(request, "agreementDateTo is before the agreementDateFrom"));
+
+        request = TravelCalculatePremiumRequest.builder()
+                .personFirstName("Ivan")
+                .personLastName("Ivanov")
+                .agreementDateFrom(LocalDate.now())
+                .agreementDateTo(LocalDate.now())
+                .build();
+
+        streamBuilder.add(Arguments.arguments(request, "agreementDateTo is the same as the agreementDateTo "));
 
         return streamBuilder.build();
     }

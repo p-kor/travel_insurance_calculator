@@ -68,7 +68,7 @@ class TravelCalculatePremiumServiceImplTest {
         BigDecimal actualAgreementPrice = response.agreementPrice();
         List<ValidationError> actualValidationErrors = response.validationErrors();
 
-        assertAll("Check wrong values in response",
+        assertAll("Check values in response",
                 () -> assertEquals(expectedPersonFirstName, actualPersonFirstName, "wrong first name"),
                 () -> assertEquals(expectedPersonLastName, actualPersonLastName, "wrong last name"),
                 () -> assertEquals(expectedAgreementDateFrom, actualAgreementDateFrom, "wrong agreement start date"),

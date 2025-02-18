@@ -1,5 +1,8 @@
-Request should include the following fields:
+1. Requests must have not empty fields:
     persons FirstName
     persons LastName
     agreements DateFrom
     agreements DateTo
+
+2. Agreement DateTo should be after DateFrom
+
