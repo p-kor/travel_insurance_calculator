@@ -33,12 +33,22 @@ dependencies {
 
 }
 
-
-
 tasks {
     test {
         useJUnitPlatform() {
-            jvmArgs += '-XX:+EnableDynamicAgentLoading'
+            if (jvmArgs == null) {
+                jvmArgs = ""
+            }
+            jvmArgs += "-Xshare:off"
+        }
+    }
+    test.doFirst {
+        def mockitoAgentJar = configurations.testRuntimeClasspath.find { it.name.contains('byte-buddy-agent') }
+        if (mockitoAgentJar != null) {
+            if (jvmArgs == null) {
+                jvmArgs = ""
+            }
+            jvmArgs += "-javaagent:${mockitoAgentJar.absolutePath}"
         }
     }
 }
