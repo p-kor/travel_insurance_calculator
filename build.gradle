@@ -17,28 +17,39 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web-services'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params
-    testImplementation 'org.junit.jupiter:junit-jupiter-params'
-
-
-    compileOnly('org.projectlombok:lombok:1.18.36')
-    annotationProcessor('org.projectlombok:lombok:1.18.36')
-
-    testCompileOnly('org.projectlombok:lombok:1.18.36')
-    testAnnotationProcessor('org.projectlombok:lombok:1.18.36')
-
+ext {
+    lombokVersion = '1.18.36'
 }
 
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web-services'
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params'
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+}
 
 tasks {
     test {
         useJUnitPlatform() {
-            jvmArgs += '-XX:+EnableDynamicAgentLoading'
+            if (jvmArgs == null) {
+                jvmArgs = ""
+            }
+            jvmArgs += "-Xshare:off"
+        }
+
+        doFirst {
+            def agentJar = configurations.testRuntimeClasspath.find { it.name.contains('byte-buddy-agent') }
+            if (agentJar != null) {
+                if (jvmArgs == null) {
+                    jvmArgs = ""
+                }
+                jvmArgs += "-javaagent:${mockitoAgentJar.absolutePath}"
+            }
         }
     }
 }
