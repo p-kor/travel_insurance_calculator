@@ -10,6 +10,7 @@ public class TestDataDateTime {
     public static final long DAYS = 5L;
 
     public static Stream<Arguments> dateFactory() {
+
         Stream.Builder<Arguments> streamBuilder = Stream.builder();
 
         LocalDate date1 = LocalDate.now();

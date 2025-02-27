@@ -34,7 +34,7 @@ class TravelCalculatePremiumRequestValidatorTest {
 
     @ParameterizedTest(name = "test with request #{index}: {1}")
     @MethodSource("com.p_kor.insurance.testdata.TestDataRequest#invalidRequestFactory")
-    @DisplayName("Test that invalid requests cause errors")
+    @DisplayName("Test that invalid requests cause error")
     void testThatHaveValidationError(TravelCalculatePremiumRequest request, String testName) {
         TravelCalculatePremiumRequestValidator requestValidator = new TravelCalculatePremiumRequestValidator();
         List<ValidationError> validationErrors = requestValidator.validate(request);

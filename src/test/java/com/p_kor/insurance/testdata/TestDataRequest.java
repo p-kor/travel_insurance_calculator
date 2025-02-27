@@ -93,8 +93,8 @@ public class TestDataRequest {
         request = TravelCalculatePremiumRequest.builder()
                 .personFirstName("Ivan")
                 .personLastName("Ivanov")
-                .agreementDateFrom(LocalDate.now())
-                .agreementDateTo(LocalDate.now().minusDays(1))
+                .agreementDateFrom(LocalDate.now().plusDays(2))
+                .agreementDateTo(LocalDate.now().plusDays(1))
                 .build();
 
         streamBuilder.add(Arguments.arguments(request, "agreementDateTo is before the agreementDateFrom"));

@@ -22,10 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TravelCalculatePremiumServiceImplTest {
 
     @Mock
-    private DateTimeService dateTimeService;
-
-    @Mock
-    private UnderwritingRateService underwritingRateService;
+    private TravelUnderwritingService travelUnderwritingService;
 
     @Mock
     private TravelCalculatePremiumRequestValidator requestValidator;
@@ -40,21 +37,19 @@ class TravelCalculatePremiumServiceImplTest {
         BigDecimal expectedAgreementPrice = new BigDecimal(TestDataRequest.DAYS);
         TravelCalculatePremiumRequest request = TestDataRequest.VALID_REQUEST;
 
-        Mockito.when(dateTimeService.daysBetweenDates(Mockito.any(LocalDate.class), Mockito.any(LocalDate.class)))
-                .thenReturn(TestDataRequest.DAYS);
-        Mockito.when(underwritingRateService.calculateAgreementPrice(Mockito.anyLong()))
-                .thenReturn(expectedAgreementPrice);
         Mockito.when(requestValidator.validate(Mockito.any(TravelCalculatePremiumRequest.class)))
                 .thenReturn(List.of());
+        Mockito.when(travelUnderwritingService.calculateAgreementPrice(Mockito.any(TravelCalculatePremiumRequest.class)))
+                .thenReturn(expectedAgreementPrice);
+
 
         TravelCalculatePremiumResponse response = premiumService.calculatePremium(request);
 
-        Mockito.verify(dateTimeService, Mockito.times(1))
-                .daysBetweenDates(Mockito.any(LocalDate.class), Mockito.any(LocalDate.class));
-        Mockito.verify(underwritingRateService, Mockito.times(1))
-                .calculateAgreementPrice(Mockito.anyLong());
         Mockito.verify(requestValidator, Mockito.times(1))
                 .validate(Mockito.any(TravelCalculatePremiumRequest.class));
+        Mockito.verify(travelUnderwritingService, Mockito.times(1))
+                .calculateAgreementPrice(Mockito.any(TravelCalculatePremiumRequest.class));
+
 
         String expectedPersonFirstName = request.personFirstName();
         String expectedPersonLastName = request.personLastName();
@@ -91,8 +86,7 @@ class TravelCalculatePremiumServiceImplTest {
 
         Mockito.verify(requestValidator, Mockito.times(1))
                 .validate(Mockito.any(TravelCalculatePremiumRequest.class));
-        Mockito.verifyNoInteractions(underwritingRateService);
-        Mockito.verifyNoInteractions(dateTimeService);
+        Mockito.verifyNoInteractions(travelUnderwritingService);
 
         String actualPersonFirstName = response.personFirstName();
         String actualPersonLastName = response.personLastName();

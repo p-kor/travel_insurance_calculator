@@ -1,6 +1,6 @@
 package com.p_kor.insurance;
 
-import com.p_kor.insurance.core.TravelCalculatePremiumServiceImpl;
+import com.p_kor.insurance.core.TravelCalculatePremiumService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +25,7 @@ class InsuranceApplicationTests {
 
     @Test
     void testThatTravelCalculatePremiumServiceIsAvailable() {
-        TravelCalculatePremiumServiceImpl bean = applicationContext.getBean(TravelCalculatePremiumServiceImpl.class);
+        TravelCalculatePremiumService bean = applicationContext.getBean(TravelCalculatePremiumService.class);
 
         assertNotNull(bean, "The bean TravelCalculatePremiumServiceImpl should not be null");
     }
