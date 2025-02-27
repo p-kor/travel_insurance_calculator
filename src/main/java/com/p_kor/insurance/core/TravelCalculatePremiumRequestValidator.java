@@ -13,11 +13,15 @@ import java.util.Optional;
 class TravelCalculatePremiumRequestValidator {
 
     public List<ValidationError> validate(TravelCalculatePremiumRequest request) {
+
         List<ValidationError> errors = new ArrayList<>();
+
         validatePersonFirstName(request).ifPresent(errors::add);
         validatePersonLastName(request).ifPresent(errors::add);
         validateAgreementDateFrom(request).ifPresent(errors::add);
         validateAgreementDateTo(request).ifPresent(errors::add);
+        validateAgreementDateToAfterDateFrom(request).ifPresent(errors::add);
+
         return errors;
     }
 
@@ -54,15 +58,24 @@ class TravelCalculatePremiumRequestValidator {
 
     private Optional<ValidationError> validateAgreementDateTo(TravelCalculatePremiumRequest request) {
 
-        LocalDate dateFrom = request.agreementDateFrom();
         LocalDate dateTo = request.agreementDateTo();
 
         if (dateTo == null) {
-            return Optional.of(new ValidationError("agreementDateFrom", "Must not be empty"));
+            return Optional.of(new ValidationError("agreementDateTo", "Must not be empty"));
         }
 
-        if (dateFrom == null) {
-            return Optional.empty();        // error already found
+        return (dateTo.isBefore(LocalDate.now()))
+                ? Optional.of(new ValidationError("agreementDateTo", "Must not be earlier than current"))
+                : Optional.empty();
+    }
+
+    private Optional<ValidationError> validateAgreementDateToAfterDateFrom(TravelCalculatePremiumRequest request) {
+
+        LocalDate dateFrom = request.agreementDateFrom();
+        LocalDate dateTo = request.agreementDateTo();
+
+        if (dateTo == null || dateFrom == null) {
+            return Optional.empty();                          // error already found
         }
 
         return (!dateTo.isAfter(dateFrom))

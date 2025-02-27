@@ -3,26 +3,34 @@ package com.p_kor.insurance.core;
 import com.p_kor.insurance.dto.TravelCalculatePremiumRequest;
 import com.p_kor.insurance.dto.TravelCalculatePremiumResponse;
 import com.p_kor.insurance.dto.ValidationError;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-@Component
-@RequiredArgsConstructor
-public class TravelCalculatePremiumServiceImpl
-        implements TravelCalculatePremiumService {
+@Component()
+class TravelCalculatePremiumServiceImpl implements TravelCalculatePremiumService {
 
-    private final DateTimeService dateTimeService;
-    private final UnderwritingRateService agreementPriceService;
+    private final TravelUnderwritingService travelUnderwritingService;
     private final TravelCalculatePremiumRequestValidator requestValidator;
+
+    @Autowired
+    public TravelCalculatePremiumServiceImpl(
+            TravelUnderwritingService travelUnderwritingService,
+            TravelCalculatePremiumRequestValidator requestValidator) {
+
+        this.travelUnderwritingService = travelUnderwritingService;
+        this.requestValidator = requestValidator;
+    }
+
 
     @Override
     public TravelCalculatePremiumResponse calculatePremium(TravelCalculatePremiumRequest request) {
 
         List<ValidationError> validationErrors = requestValidator.validate(request);
+
         if (!validationErrors.isEmpty()) {
             return TravelCalculatePremiumResponse.builder()
                     .validationErrors(validationErrors)
@@ -33,8 +41,7 @@ public class TravelCalculatePremiumServiceImpl
         String lastName = request.personLastName();
         LocalDate agreementDateFrom = request.agreementDateFrom();
         LocalDate agreementDateTo = request.agreementDateTo();
-        long days = dateTimeService.daysBetweenDates(agreementDateFrom, agreementDateTo);
-        BigDecimal agreementPrice = agreementPriceService.calculateAgreementPrice(days);
+        BigDecimal agreementPrice = travelUnderwritingService.calculateAgreementPrice(request);
 
         return TravelCalculatePremiumResponse.builder()
                 .personFirstName(firstName)
