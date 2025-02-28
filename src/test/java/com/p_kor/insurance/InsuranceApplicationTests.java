@@ -27,7 +27,6 @@ class InsuranceApplicationTests {
     void testThatTravelCalculatePremiumServiceIsAvailable() {
         TravelCalculatePremiumService bean = applicationContext.getBean(TravelCalculatePremiumService.class);
 
-//        assertNotNull(bean, "The bean TravelCalculatePremiumServiceImpl should not be null");
-        assertNotNull(null, "The bean TravelCalculatePremiumServiceImpl should not be null");
+        assertNotNull(bean, "The bean TravelCalculatePremiumServiceImpl should not be null");
     }
 }
