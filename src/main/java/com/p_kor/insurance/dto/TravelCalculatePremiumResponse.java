@@ -10,9 +10,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Builder
-//@JsonPropertyOrder({"validationErrors", "personFirstName", "personLastName", "agreementDateFrom", "agreementDateTo", "agreementPrice" })
 @JsonPropertyOrder({"validationErrors"})
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public record TravelCalculatePremiumResponse(
         String personFirstName,
         String personLastName,
