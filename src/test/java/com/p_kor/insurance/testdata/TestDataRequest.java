@@ -111,8 +111,8 @@ public class TestDataRequest {
         request = TravelCalculatePremiumRequest.builder()
                 .personFirstName(PERSON_FIRSTNAME)
                 .personLastName(PERSON_LASTNAME)
-                .agreementDateFrom(AGREEMENT_DATEFROM)
-                .agreementDateTo(AGREEMENT_DATETO)
+                .agreementDateFrom(AGREEMENT_DATETO)
+                .agreementDateTo(AGREEMENT_DATEFROM)
                 .build();
 
         streamBuilder.add(Arguments.arguments(request, "agreementDateTo is before the agreementDateFrom"));
