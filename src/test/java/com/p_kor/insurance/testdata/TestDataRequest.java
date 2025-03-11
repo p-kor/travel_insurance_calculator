@@ -81,7 +81,7 @@ public class TestDataRequest {
                 .agreementDateTo(AGREEMENT_DATETO)
                 .build();
 
-        streamBuilder.add(Arguments.arguments(request, "lastName is blank string"));
+        streamBuilder.add(Arguments.arguments(request, "lastName is blank"));
 
         request = TravelCalculatePremiumRequest.builder()
                 .personFirstName(PERSON_FIRSTNAME)
@@ -124,7 +124,7 @@ public class TestDataRequest {
                 .agreementDateTo(AGREEMENT_DATEFROM)
                 .build();
 
-        streamBuilder.add(Arguments.arguments(request, "agreementDateTo is the same as the agreementDateTo "));
+        streamBuilder.add(Arguments.arguments(request, "agreementDateFrom is the same as the agreementDateTo"));
 
         return streamBuilder.build();
     }

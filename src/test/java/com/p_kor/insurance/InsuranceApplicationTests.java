@@ -21,10 +21,7 @@ class InsuranceApplicationTests {
     @Test
     void contextLoads() {
         assertNotNull(applicationContext, "ApplicationContext should not be null");
-    }
 
-    @Test
-    void testThatTravelCalculatePremiumServiceIsAvailable() {
         TravelCalculatePremiumService bean = applicationContext.getBean(TravelCalculatePremiumService.class);
 
         assertNotNull(bean, "The bean TravelCalculatePremiumServiceImpl should not be null");

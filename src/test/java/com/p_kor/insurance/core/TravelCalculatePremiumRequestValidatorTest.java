@@ -24,7 +24,7 @@ class TravelCalculatePremiumRequestValidatorTest {
 
     @ParameterizedTest(name = "test with {1}")
     @MethodSource("com.p_kor.insurance.testdata.TestDataRequest#emptyRequestFactory")
-    @DisplayName("Test that valid request brings no errors")
+    @DisplayName("Test that an empty request brings 4 errors")
     void testMultipleValidationErrors(TravelCalculatePremiumRequest request, String testName) {
         TravelCalculatePremiumRequestValidator requestValidator = new TravelCalculatePremiumRequestValidator();
         List<ValidationError> validationErrors = requestValidator.validate(request);
