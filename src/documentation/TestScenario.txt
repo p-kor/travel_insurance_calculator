@@ -1,0 +1,98 @@
+Calculator of Travel Insurance Premium
+
+User case:
+The client sends a request to the server through POST end point "/insurance/travel/"
+and receives a calculated premium amount for the travel insurance policy
+or a list of validation errors if posted data contain errors.
+
+UNIT TESTS:
+
+DateTimeService
+	1. Returns right number days between two ascending dates
+	2. Returns 0 days between the same dates
+	3. Returns a negative number of days between two descending dates
+
+TravelPremiumUnderwriting
+	1. Calculates the right premium amount
+
+TravelCalculatePremiumRequestValidator
+	1. Returns an empty validation errors list for a valid request
+	2. Returns a list with 4 validation errors for an empty request
+	3. Returns a list with a one validation error for requests with one invalid field
+		1. firstName is null
+		2. firstName is blank
+		3. lastName is null
+		4. lastName is blank
+		5. agreementDateFrom is missed
+		6. agreementDateFrom is before the current date
+		7. agreementDateTo is missed
+		8. agreementDateTo is before the agreementDateFrom
+		9. agreementDateFrom is the same as the agreementDateTo
+
+TravelCalculatePremiumServiceImpl
+	1. Mocking Validator to produce 0 validation errors.
+	   Then passing a valid request to the TravelCalculatePremiumServiceImpl.
+	   Service returns a response with data fields filled with information from request, validation errors list is empty.
+	2. Mocking Validator to produce the validation error.
+	   Then passing a valid request to the TravelCalculatePremiumServiceImpl.
+	   Service returns a response with empty data fields, validation errors list contains the validation error.
+
+TravelCalculatePremiumController
+	1. The Controller is available and returns a response on receiving a request
+
+
+INTEGRATION TESTS:
+
+InsuranceApplication
+	1. Check that the app context loads and TravelCalculatePremiumService bean is available in the context
+
+TravelCalculatePremiumController
+POST endpoint "/insurance/travel/"
+	1. On receiving a valid request, the Controller
+	   returns a response with OK status, with data fields filled with information from request, and list of validation errors is empty
+	        Request:
+                {
+                    "personFirstName": "Ivan",
+                    "personLastName": "Ivanoff",
+                    "agreementDateFrom": "2026-03-04",
+                    "agreementDateTo": "2026-03-19"
+                }
+            Response:
+                {
+                    "validationErrors": null,
+                    "personFirstName": "Ivan",
+                    "personLastName": "Ivanoff",
+                    "agreementDateFrom": "2026-03-04",
+                    "agreementDateTo": "2026-03-19",
+                    "agreementPrice": 15
+                }
+
+	2. On receiving a request that produces validation error, the Controller
+	   returns a response with empty data fields, and list of validation errors contains the corresponding validation error.
+TODO: what status should be?
+
+            Request:
+                {
+                    "personFirstName": " ",
+                    "personLastName": "Ivanoff",
+                    "agreementDateFrom": "2026-03-01",
+                    "agreementDateTo": "2026-03-01"
+                }
+            Response:
+                {
+                    "validationErrors": [
+                        {
+                            "field": "personFirstName",
+                            "message": "Must not be empty!"
+                        },
+                        {
+                            "field": "agreementDateFrom",
+                            "message": "Must be after agreementDateFrom"
+                        }
+                    ],
+                    "personFirstName": null,
+                    "personLastName": null,
+                    "agreementDateFrom": null,
+                    "agreementDateTo": null,
+                    "agreementPrice": null
+                }
