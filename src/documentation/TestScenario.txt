@@ -76,7 +76,7 @@ TODO: what status should be?
                     "personFirstName": " ",
                     "personLastName": "Ivanoff",
                     "agreementDateFrom": "2026-03-01",
-                    "agreementDateTo": "2026-03-01"
+                    "agreementDateTo": "2026-03-19"
                 }
             Response:
                 {
@@ -84,10 +84,6 @@ TODO: what status should be?
                         {
                             "field": "personFirstName",
                             "message": "Must not be empty!"
-                        },
-                        {
-                            "field": "agreementDateFrom",
-                            "message": "Must be after agreementDateFrom"
                         }
                     ],
                     "personFirstName": null,
