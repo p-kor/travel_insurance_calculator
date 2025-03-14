@@ -92,3 +92,34 @@ TODO: what status should be?
                     "agreementDateTo": null,
                     "agreementPrice": null
                 }
+
+
+            Request:
+                {}
+
+            Response:
+                {
+                  "validationErrors": [
+                    {
+                      "field": "personFirstName",
+                      "message": "Must not be empty!"
+                    },
+                    {
+                      "field": "personLastName",
+                      "message": "Must not be empty!"
+                    },
+                    {
+                      "field": "agreementDateFrom",
+                      "message": "Must not be empty"
+                    },
+                    {
+                      "field": "agreementDateTo",
+                      "message": "Must not be empty"
+                    }
+                  ],
+                  "personFirstName": null,
+                  "personLastName": null,
+                  "agreementDateFrom": null,
+                  "agreementDateTo": null,
+                  "agreementPrice": null
+                }
