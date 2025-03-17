@@ -1,5 +1,6 @@
 package com.p_kor.insurance.core;
 
+import com.p_kor.insurance.core.validation.TravelCalculatePremiumRequestValidationService;
 import com.p_kor.insurance.dto.TravelCalculatePremiumRequest;
 import com.p_kor.insurance.dto.TravelCalculatePremiumResponse;
 import com.p_kor.insurance.dto.ValidationError;
@@ -10,26 +11,25 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-@Component()
+@Component
 class TravelCalculatePremiumServiceImpl implements TravelCalculatePremiumService {
 
-    private final TravelUnderwritingService travelUnderwritingService;
-    private final TravelCalculatePremiumRequestValidator requestValidator;
+    private final TravelCalculatePremiumUnderwritingService underwritingService;
+    private final TravelCalculatePremiumRequestValidationService requestValidationService;
 
     @Autowired
     public TravelCalculatePremiumServiceImpl(
-            TravelUnderwritingService travelUnderwritingService,
-            TravelCalculatePremiumRequestValidator requestValidator) {
-
-        this.travelUnderwritingService = travelUnderwritingService;
-        this.requestValidator = requestValidator;
+            TravelCalculatePremiumUnderwritingService underwritingService,
+            TravelCalculatePremiumRequestValidationService requestValidationService
+    ) {
+        this.underwritingService = underwritingService;
+        this.requestValidationService = requestValidationService;
     }
-
 
     @Override
     public TravelCalculatePremiumResponse calculatePremium(TravelCalculatePremiumRequest request) {
 
-        List<ValidationError> validationErrors = requestValidator.validate(request);
+        List<ValidationError> validationErrors = requestValidationService.validate(request);
 
         if (!validationErrors.isEmpty()) {
             return TravelCalculatePremiumResponse.builder()
@@ -41,7 +41,7 @@ class TravelCalculatePremiumServiceImpl implements TravelCalculatePremiumService
         String lastName = request.personLastName();
         LocalDate agreementDateFrom = request.agreementDateFrom();
         LocalDate agreementDateTo = request.agreementDateTo();
-        BigDecimal agreementPrice = travelUnderwritingService.calculateAgreementPrice(request);
+        BigDecimal agreementPrice = underwritingService.calculateAgreementPrice(request);
 
         return TravelCalculatePremiumResponse.builder()
                 .personFirstName(firstName)
