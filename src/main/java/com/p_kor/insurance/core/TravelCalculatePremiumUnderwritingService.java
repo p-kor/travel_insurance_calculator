@@ -1,21 +1,18 @@
 package com.p_kor.insurance.core;
 
 import com.p_kor.insurance.dto.TravelCalculatePremiumRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Component
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 class TravelCalculatePremiumUnderwritingService {
 
     private final DateTimeService dateTimeService;
-
-    @Autowired
-    TravelCalculatePremiumUnderwritingService(DateTimeService dateTimeService) {
-        this.dateTimeService = dateTimeService;
-    }
 
     BigDecimal calculateAgreementPrice(TravelCalculatePremiumRequest request) {
         LocalDate dateFrom = request.agreementDateFrom();
