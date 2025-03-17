@@ -8,12 +8,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Component
-class TravelUnderwritingService {
+class TravelCalculatePremiumUnderwritingService {
 
     private final DateTimeService dateTimeService;
 
     @Autowired
-    TravelUnderwritingService(DateTimeService dateTimeService) {
+    TravelCalculatePremiumUnderwritingService(DateTimeService dateTimeService) {
         this.dateTimeService = dateTimeService;
     }
 
