@@ -13,8 +13,8 @@ public class TestDataRequest {
     public static final long DAYS = 43L;
     public static String PERSON_FIRSTNAME = "Ivan";
     public static String PERSON_LASTNAME = "Ivanov";
-    public static LocalDate AGREEMENT_DATEFROM = LocalDate.now();
-    public static LocalDate AGREEMENT_DATETO = LocalDate.now().plusDays(DAYS);
+    public static LocalDate AGREEMENT_DATEFROM = LocalDate.now().plusDays(1);
+    public static LocalDate AGREEMENT_DATETO = AGREEMENT_DATEFROM.plusDays(DAYS);
     public static BigDecimal AGREEMENT_PRICE = new BigDecimal(DAYS);
 
     public static final TravelCalculatePremiumRequest VALID_REQUEST =
@@ -39,24 +39,34 @@ public class TestDataRequest {
                     .build();
 
     public static Stream<Arguments> validRequestFactory() {
-        return Stream.of(Arguments.arguments(VALID_REQUEST, "valid request"));
+
+        String testName = "valid request";
+        TravelCalculatePremiumRequest request = VALID_REQUEST;
+
+        return Stream.of(Arguments.argumentSet(testName, request));
     }
 
     public static Stream<Arguments> emptyRequestFactory() {
-        return Stream.of(Arguments.arguments(EMPTY_REQUEST, "request with all fields null"));
+
+        String testName = "request with all fields null";
+        TravelCalculatePremiumRequest request = EMPTY_REQUEST;
+
+        return Stream.of(Arguments.argumentSet(testName, request));
     }
 
     public static Stream<Arguments> invalidRequestFactory() {
         Stream.Builder<Arguments> streamBuilder = Stream.builder();
 
+        String testName = "firstName is null";
         TravelCalculatePremiumRequest request = TravelCalculatePremiumRequest.builder()
                 .personLastName(PERSON_LASTNAME)
                 .agreementDateFrom(AGREEMENT_DATEFROM)
                 .agreementDateTo(AGREEMENT_DATETO)
                 .build();
 
-        streamBuilder.add(Arguments.arguments(request, "firstName is null"));
+        streamBuilder.add(Arguments.argumentSet(testName, request));
 
+        testName = "firstName is blank";
         request = TravelCalculatePremiumRequest.builder()
                 .personFirstName(" ")
                 .personLastName(PERSON_LASTNAME)
@@ -64,16 +74,18 @@ public class TestDataRequest {
                 .agreementDateTo(AGREEMENT_DATETO)
                 .build();
 
-        streamBuilder.add(Arguments.arguments(request, "firstName is blank"));
+        streamBuilder.add(Arguments.argumentSet(testName, request));
 
+        testName = "lastName is null";
         request = TravelCalculatePremiumRequest.builder()
                 .personFirstName(PERSON_FIRSTNAME)
                 .agreementDateFrom(AGREEMENT_DATEFROM)
                 .agreementDateTo(AGREEMENT_DATETO)
                 .build();
 
-        streamBuilder.add(Arguments.arguments(request, "lastName is null"));
+        streamBuilder.add(Arguments.argumentSet(testName, request));
 
+        testName = "lastName is blank";
         request = TravelCalculatePremiumRequest.builder()
                 .personFirstName(PERSON_FIRSTNAME)
                 .personLastName(" ")
@@ -81,16 +93,18 @@ public class TestDataRequest {
                 .agreementDateTo(AGREEMENT_DATETO)
                 .build();
 
-        streamBuilder.add(Arguments.arguments(request, "lastName is blank"));
+        streamBuilder.add(Arguments.argumentSet(testName, request));
 
+        testName = "agreementDateFrom is null";
         request = TravelCalculatePremiumRequest.builder()
                 .personFirstName(PERSON_FIRSTNAME)
                 .personLastName(PERSON_LASTNAME)
                 .agreementDateTo(AGREEMENT_DATETO)
                 .build();
 
-        streamBuilder.add(Arguments.arguments(request, "agreementDateFrom is null"));
+        streamBuilder.add(Arguments.argumentSet(testName, request));
 
+        testName = "agreementDateFrom is before the current date";
         request = TravelCalculatePremiumRequest.builder()
                 .personFirstName(PERSON_FIRSTNAME)
                 .personLastName(PERSON_LASTNAME)
@@ -98,16 +112,18 @@ public class TestDataRequest {
                 .agreementDateTo(AGREEMENT_DATETO)
                 .build();
 
-        streamBuilder.add(Arguments.arguments(request, "agreementDateFrom is before the current date"));
+        streamBuilder.add(Arguments.argumentSet(testName, request));
 
+        testName = "agreementDateTo is null";
         request = TravelCalculatePremiumRequest.builder()
                 .personFirstName(PERSON_FIRSTNAME)
                 .personLastName(PERSON_LASTNAME)
                 .agreementDateFrom(AGREEMENT_DATEFROM)
                 .build();
 
-        streamBuilder.add(Arguments.arguments(request, "agreementDateTo is null"));
+        streamBuilder.add(Arguments.argumentSet(testName, request));
 
+        testName = "agreementDateTo is before the agreementDateFrom";
         request = TravelCalculatePremiumRequest.builder()
                 .personFirstName(PERSON_FIRSTNAME)
                 .personLastName(PERSON_LASTNAME)
@@ -115,8 +131,9 @@ public class TestDataRequest {
                 .agreementDateTo(AGREEMENT_DATEFROM)
                 .build();
 
-        streamBuilder.add(Arguments.arguments(request, "agreementDateTo is before the agreementDateFrom"));
+        streamBuilder.add(Arguments.argumentSet(testName, request));
 
+        testName = "agreementDateTo is the same as the agreementDateFrom";
         request = TravelCalculatePremiumRequest.builder()
                 .personFirstName(PERSON_FIRSTNAME)
                 .personLastName(PERSON_LASTNAME)
@@ -124,7 +141,7 @@ public class TestDataRequest {
                 .agreementDateTo(AGREEMENT_DATEFROM)
                 .build();
 
-        streamBuilder.add(Arguments.arguments(request, "agreementDateFrom is the same as the agreementDateTo"));
+        streamBuilder.add(Arguments.argumentSet(testName, request));
 
         return streamBuilder.build();
     }

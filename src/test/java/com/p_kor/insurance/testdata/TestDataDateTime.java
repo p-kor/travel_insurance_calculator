@@ -13,26 +13,26 @@ public class TestDataDateTime {
 
         Stream.Builder<Arguments> streamBuilder = Stream.builder();
 
+        String testName = "second date is after the first date";
         LocalDate date1 = LocalDate.now();
         LocalDate date2 = date1.plusDays(DAYS);
-        String testName = "second date is after the first date";
         long expectedResult = DAYS;
 
-        streamBuilder.add(Arguments.arguments(date1, date2, testName, expectedResult));
+        streamBuilder.add(Arguments.argumentSet(testName, date1, date2, expectedResult));
 
+        testName = "second date is equal to the first date";
         date1 = LocalDate.now();
         date2 = date1;
-        testName = "both dates are equal";
         expectedResult = 0L;
 
-        streamBuilder.add(Arguments.arguments(date1, date2, testName, expectedResult));
+        streamBuilder.add(Arguments.argumentSet(testName, date1, date2, expectedResult));
 
+        testName = "second date is before the first date";
         date1 = LocalDate.now();
         date2 = date1.minusDays(DAYS);
-        testName = "second date is before the first date";
         expectedResult = -DAYS;
 
-        streamBuilder.add(Arguments.arguments(date1, date2, testName, expectedResult));
+        streamBuilder.add(Arguments.argumentSet(testName, date1, date2, expectedResult));
 
         return streamBuilder.build();
     }
