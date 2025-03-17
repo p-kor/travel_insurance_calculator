@@ -2,7 +2,7 @@
   "validationErrors": [
     {
       "field": "personFirstName",
-      "message": "Must not be empty!"
+      "message": "First name is required"
     }
   ],
   "personFirstName": null,

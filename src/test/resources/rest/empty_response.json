@@ -2,19 +2,19 @@
   "validationErrors": [
     {
       "field": "personFirstName",
-      "message": "Must not be empty!"
+      "message": "First name is required"
     },
     {
       "field": "personLastName",
-      "message": "Must not be empty!"
+      "message": "Last name is required"
     },
     {
       "field": "agreementDateFrom",
-      "message": "Must not be empty"
+      "message": "Date FROM is required"
     },
     {
       "field": "agreementDateTo",
-      "message": "Must not be empty"
+      "message": "Date TO is required"
     }
   ],
   "personFirstName": null,
