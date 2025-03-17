@@ -20,7 +20,8 @@ class TravelCalculatePremiumController {
         this.calculatePremiumService = calculatePremiumService;
     }
 
-    @PostMapping(path = "/",
+    @PostMapping(
+            path = "/",
             consumes = "application/json",
             produces = "application/json")
     public TravelCalculatePremiumResponse calculatePremium(@RequestBody TravelCalculatePremiumRequest request) {
