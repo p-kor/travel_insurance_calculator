@@ -5,6 +5,8 @@ import com.p_kor.insurance.core.TravelCalculatePremiumService;
 import com.p_kor.insurance.dto.TravelCalculatePremiumRequest;
 import com.p_kor.insurance.dto.TravelCalculatePremiumResponse;
 import com.p_kor.insurance.testdata.TestDataRequest;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -36,6 +38,8 @@ class TravelCalculatePremiumControllerUnitTest {
     private ObjectMapper objectMapper;
 
     @Test
+    @Tag("UnitTest")
+    @DisplayName("Unit test controller for POST \"/insurance/travel/\"")
     void testPostEndPointUnit() throws Exception {
 
         TravelCalculatePremiumRequest request = TestDataRequest.VALID_REQUEST;

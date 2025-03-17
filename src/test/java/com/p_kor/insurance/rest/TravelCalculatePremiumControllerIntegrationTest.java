@@ -1,6 +1,8 @@
 package com.p_kor.insurance.rest;
 
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 
@@ -40,10 +42,12 @@ class TravelCalculatePremiumControllerIntegrationTest {
             Arguments.argumentSet("missed firstname", "missed_firstname_request.json", "missed_firstname_response.json", 200),
             Arguments.argumentSet("empty request", "empty_request.json", "empty_response.json", 200));
 
-    @DisplayName("Integration test for POST /insurance/travel/ endpoint ")
     @ParameterizedTest(name = "{argumentSetName}")
     @FieldSource("argumentSets")
-    void testPostEndPointParam(String requestFileName, String responseFileName, int expectedStatus) throws Exception {
+    @Tag("IntegrationTest")
+    @DisplayName("Integration test for POST /insurance/travel/ endpoint ")
+    @SneakyThrows
+    void testPostEndPointParam(String requestFileName, String responseFileName, int expectedStatus) {
 
         String requestLocation = "classpath:" + BASE_PATH + requestFileName;
         Path requestFile = resourceLoader.getResource(requestLocation).getFile().toPath();

@@ -1,10 +1,12 @@
 package com.p_kor.insurance.core;
 
+import com.p_kor.insurance.core.validation.TravelCalculatePremiumRequestValidationService;
 import com.p_kor.insurance.dto.TravelCalculatePremiumRequest;
 import com.p_kor.insurance.dto.TravelCalculatePremiumResponse;
 import com.p_kor.insurance.dto.ValidationError;
 import com.p_kor.insurance.testdata.TestDataRequest;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,32 +24,33 @@ import static org.junit.jupiter.api.Assertions.*;
 class TravelCalculatePremiumServiceImplTest {
 
     @Mock
-    private TravelUnderwritingService travelUnderwritingService;
+    private TravelCalculatePremiumUnderwritingService travelCalculatePremiumUnderwritingService;
 
     @Mock
-    private TravelCalculatePremiumRequestValidator requestValidator;
+    private TravelCalculatePremiumRequestValidationService requestValidationService;
 
     @InjectMocks
     private TravelCalculatePremiumServiceImpl premiumService;
 
     @Test
+    @Tag("UnitTest")
     @DisplayName("Test that response contains correct values and no errors")
     void testResponseContainsCorrectValuesAndNoErrors() {
 
         BigDecimal expectedAgreementPrice = new BigDecimal(TestDataRequest.DAYS);
         TravelCalculatePremiumRequest request = TestDataRequest.VALID_REQUEST;
 
-        Mockito.when(requestValidator.validate(Mockito.any(TravelCalculatePremiumRequest.class)))
+        Mockito.when(requestValidationService.validate(Mockito.any(TravelCalculatePremiumRequest.class)))
                 .thenReturn(List.of());
-        Mockito.when(travelUnderwritingService.calculateAgreementPrice(Mockito.any(TravelCalculatePremiumRequest.class)))
+        Mockito.when(travelCalculatePremiumUnderwritingService.calculateAgreementPrice(Mockito.any(TravelCalculatePremiumRequest.class)))
                 .thenReturn(expectedAgreementPrice);
 
 
         TravelCalculatePremiumResponse response = premiumService.calculatePremium(request);
 
-        Mockito.verify(requestValidator, Mockito.times(1))
+        Mockito.verify(requestValidationService, Mockito.times(1))
                 .validate(Mockito.any(TravelCalculatePremiumRequest.class));
-        Mockito.verify(travelUnderwritingService, Mockito.times(1))
+        Mockito.verify(travelCalculatePremiumUnderwritingService, Mockito.times(1))
                 .calculateAgreementPrice(Mockito.any(TravelCalculatePremiumRequest.class));
 
 
@@ -73,20 +76,21 @@ class TravelCalculatePremiumServiceImplTest {
     }
 
     @Test
+    @Tag("UnitTest")
     @DisplayName("Test that response contains validation error")
     void testResponseContainsValidationError() {
 
         TravelCalculatePremiumRequest request = TestDataRequest.VALID_REQUEST;
         ValidationError expectedValidationError = new ValidationError("testField", "validation error");
 
-        Mockito.when(requestValidator.validate(Mockito.any(TravelCalculatePremiumRequest.class)))
+        Mockito.when(requestValidationService.validate(Mockito.any(TravelCalculatePremiumRequest.class)))
                 .thenReturn(List.of(expectedValidationError));
 
         TravelCalculatePremiumResponse response = premiumService.calculatePremium(request);
 
-        Mockito.verify(requestValidator, Mockito.times(1))
+        Mockito.verify(requestValidationService, Mockito.times(1))
                 .validate(Mockito.any(TravelCalculatePremiumRequest.class));
-        Mockito.verifyNoInteractions(travelUnderwritingService);
+        Mockito.verifyNoInteractions(travelCalculatePremiumUnderwritingService);
 
         String actualPersonFirstName = response.personFirstName();
         String actualPersonLastName = response.personLastName();
@@ -96,8 +100,8 @@ class TravelCalculatePremiumServiceImplTest {
         List<ValidationError> actualValidationErrors = response.validationErrors();
 
         assertAll("Check response with validation error",
-                () -> assertNull(actualPersonFirstName, "person first name should be null"),
-                () -> assertNull(actualPersonLastName, "person last name should be null"),
+                () -> assertNull(actualPersonFirstName, "person_validation first name should be null"),
+                () -> assertNull(actualPersonLastName, "person_validation last name should be null"),
                 () -> assertNull(actualAgreementDateFrom, "agreement start date should be null"),
                 () -> assertNull(actualAgreementDateTo, "agreement end date should be null"),
                 () -> assertNull(actualAgreementPrice, "agreement agreement price should be null"),
