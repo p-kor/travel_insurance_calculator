@@ -83,7 +83,7 @@ TODO: what status should be?
                     "validationErrors": [
                         {
                             "field": "personFirstName",
-                            "message": "Must not be empty!"
+                            "message": "First name is required"
                         }
                     ],
                     "personFirstName": null,
@@ -102,15 +102,15 @@ TODO: what status should be?
                   "validationErrors": [
                     {
                       "field": "personFirstName",
-                      "message": "Must not be empty!"
+                      "message": "First name is required"
                     },
                     {
                       "field": "personLastName",
-                      "message": "Must not be empty!"
+                      "message": "First name is required"
                     },
                     {
                       "field": "agreementDateFrom",
-                      "message": "Must not be empty"
+                      "message": "Date FROM is required"
                     },
                     {
                       "field": "agreementDateTo",
