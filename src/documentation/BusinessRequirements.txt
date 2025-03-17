@@ -1,10 +1,12 @@
-1. Requests must have not empty fields:
+1. Requests must include the following data
     persons FirstName
     persons LastName
     agreements DateFrom
     agreements DateTo
 
-2. Agreement DateTo should be after DateFrom
+2. Agreement DateFrom and DateTo should be after the current date
+
+3. Agreement DateTo should be after DateFrom
 
 underwriting
 underwriting rate
