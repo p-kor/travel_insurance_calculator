@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: "travel calculate premium"
+
+logging:
+  file:
+    path: ./log/travel_calculate_premium.log
