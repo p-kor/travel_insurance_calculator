@@ -12,6 +12,7 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+import static org.springframework.core.io.ResourceLoader.CLASSPATH_URL_PREFIX;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -49,13 +51,8 @@ class TravelCalculatePremiumControllerIntegrationTest {
     @SneakyThrows
     void testPostEndPointParam(String requestFileName, String responseFileName, int expectedStatus) {
 
-        String requestLocation = "classpath:" + BASE_PATH + requestFileName;
-        Path requestFile = resourceLoader.getResource(requestLocation).getFile().toPath();
-        String requestJson = Files.readString(requestFile);
-
-        String responseLocation = "classpath:" + BASE_PATH + responseFileName;
-        Path responseFile = resourceLoader.getResource(responseLocation).getFile().toPath();
-        String responseJson = Files.readString(responseFile);
+        String requestJson = readJson(requestFileName);
+        String responseJson = readJson(responseFileName);
 
         String actualResponse = mockMvc
                 .perform(post(ENDPOINT)
@@ -68,6 +65,17 @@ class TravelCalculatePremiumControllerIntegrationTest {
                 .getContentAsString();
 
         JSONAssert.assertEquals(responseJson, actualResponse, JSONCompareMode.NON_EXTENSIBLE);
+    }
+
+    @SneakyThrows
+    private String readJson(String fileName) throws Exception {
+        String location =  CLASSPATH_URL_PREFIX + BASE_PATH + fileName;
+        Resource resource = resourceLoader.getResource(location);
+        if (!resource.exists()) {
+            throw new Exception("File not found: " + location);
+        }
+        Path file = resourceLoader.getResource(location).getFile().toPath();
+        return Files.readString(file);
     }
 
 }
