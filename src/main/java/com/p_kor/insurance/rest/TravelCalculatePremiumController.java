@@ -1,10 +1,12 @@
 package com.p_kor.insurance.rest;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Stopwatch;
 import com.p_kor.insurance.core.TravelCalculatePremiumService;
 import com.p_kor.insurance.dto.TravelCalculatePremiumRequest;
 import com.p_kor.insurance.dto.TravelCalculatePremiumResponse;
+import com.p_kor.insurance.log.TravelCalculatePremiumRequestLogger;
+import com.p_kor.insurance.log.TravelCalculatePremiumResponseLogger;
+import com.p_kor.insurance.log.TravelCalculatePremiumRequestExecutionTimeLogger;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,20 +22,25 @@ import org.springframework.web.bind.annotation.RestController;
 class TravelCalculatePremiumController {
 
     private final TravelCalculatePremiumService calculatePremiumService;
-
-    private final ObjectMapper objectMapper;
+    private final TravelCalculatePremiumRequestLogger requestLogger;
+    private final TravelCalculatePremiumResponseLogger responseLogger;
+    private final TravelCalculatePremiumRequestExecutionTimeLogger executionTimeLogger;
 
     @PostMapping(
             path = "/",
             consumes = "application/json",
             produces = "application/json")
     public TravelCalculatePremiumResponse calculatePremium(@RequestBody TravelCalculatePremiumRequest request) {
-        try {
-            log.info("Received request: {}", objectMapper.writeValueAsString(request));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        return calculatePremiumService.calculatePremium(request);
+
+        requestLogger.log(request);
+
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        TravelCalculatePremiumResponse response = calculatePremiumService.calculatePremium(request);
+        executionTimeLogger.log(stopwatch.stop());
+
+        responseLogger.log(response);
+
+        return response;
     }
 
 }
