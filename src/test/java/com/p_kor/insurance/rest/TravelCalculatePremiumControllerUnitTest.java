@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.p_kor.insurance.core.TravelCalculatePremiumService;
 import com.p_kor.insurance.dto.TravelCalculatePremiumRequest;
 import com.p_kor.insurance.dto.TravelCalculatePremiumResponse;
+import com.p_kor.insurance.log.TravelCalculatePremiumRequestExecutionTimeLogger;
+import com.p_kor.insurance.log.TravelCalculatePremiumRequestLogger;
+import com.p_kor.insurance.log.TravelCalculatePremiumResponseLogger;
 import com.p_kor.insurance.testdata.TestDataRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -33,6 +36,15 @@ class TravelCalculatePremiumControllerUnitTest {
 
     @MockitoBean
     private TravelCalculatePremiumService calculatePremiumService;
+
+    @MockitoBean
+    private TravelCalculatePremiumRequestLogger requestLogger;
+
+    @MockitoBean
+    private  TravelCalculatePremiumResponseLogger responseLogger;
+
+    @MockitoBean
+    private TravelCalculatePremiumRequestExecutionTimeLogger executionTimeLogger;
 
     @Autowired
     private ObjectMapper objectMapper;
