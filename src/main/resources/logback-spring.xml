@@ -1,0 +1,68 @@
+<configuration>
+
+    <springProperty scope="context" name="LOG_PATH" source="premium.log.path" defaultValue="log"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{ISO8601} [%thread] %highlight(%-5level) %cyan(%logger{36}) - %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/premium.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/premium-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>1MB</maxFileSize>
+            <maxHistory>10</maxHistory>
+            <totalSizeCap>10MB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>premium-%d{ISO8601} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+<!--        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+<!--            <level>DEBUG</level>-->
+<!--        </filter>-->
+    </appender>
+
+    <appender name="FILE_REQUEST_RESPONSE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/premium_request_response.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/premium_request_response-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>1MB</maxFileSize>
+            <maxHistory>10</maxHistory>
+            <totalSizeCap>10MB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>premium-%d{ISO8601} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+
+        <turboFilter class="ch.qos.logback.classic.turbo.TurboFilter">
+            <marker>REST_LOG</marker>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </turboFilter>
+
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+    <logger name="com.p_kor.insurance.log.TravelCalculatePremiumRequestLogger" level="INFO">
+        <appender-ref ref="FILE_REQUEST_RESPONSE"/>
+    </logger>
+
+    <logger name="com.p_kor.insurance.log.TravelCalculatePremiumResponseLogger" level="INFO">
+        <appender-ref ref="FILE_REQUEST_RESPONSE"/>
+    </logger>
+
+    <logger name="com.p_kor.insurance.log.TravelCalculatePremiumRequestExecutionTimeLogger" level="INFO">
+        <appender-ref ref="FILE_REQUEST_RESPONSE"/>
+    </logger>
+
+
+</configuration>
